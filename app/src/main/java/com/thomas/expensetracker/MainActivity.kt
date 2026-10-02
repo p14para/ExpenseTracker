@@ -41,7 +41,7 @@ data class Transaction(
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState) // test
 
         setContent {
             MaterialTheme {
