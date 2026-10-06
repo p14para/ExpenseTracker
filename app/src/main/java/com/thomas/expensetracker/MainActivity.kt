@@ -226,7 +226,7 @@ fun ExpenseDashboard(
                     showMessage = true
                 },
             ) {
-                Text("+ Προσθήκη συναλλαγής")
+                Text("+ Προσθήκη συναλλαγής") //text
             }
 
             if (showMessage) {
