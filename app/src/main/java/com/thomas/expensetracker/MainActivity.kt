@@ -17,12 +17,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.util.Locale
+import androidx.compose.material3.Button
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 private val AppBackground = Color(0xFFF4F6FA)
 private val Navy = Color(0xFF172554)
@@ -38,6 +45,11 @@ data class Transaction(
     val amount: Double,
     val type: TransactionType
 )
+
+
+fun formatMoney (amount: Double): String {
+    return String.format(Locale("el","GR"), "%.2f", amount)
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,11 +105,17 @@ fun ExpenseDashboard(
 
 ) {
 
+
+    var showMessage by remember { mutableStateOf(false) }
+    var title by remember { mutableStateOf("") }
+
     val transactions = listOf(
         Transaction("Supermarket", "Φαγητό", 65.0, TransactionType.EXPENSE),
         Transaction("Μισθός", "Έσοδα", 1500.0, TransactionType.INCOME),
         Transaction("Καύσιμα", "Μεταφορές", 45.0, TransactionType.EXPENSE),
-        Transaction("Καφές", "Φαγητό", 3.5, TransactionType.EXPENSE),)
+        Transaction("Καφές", "Φαγητό", 3.5, TransactionType.EXPENSE),
+        Transaction("Βενζίνη", "Μεταφορές", 50.0, TransactionType.EXPENSE)
+    )
 
     val income = transactions
         .filter { it.type == TransactionType.INCOME }
@@ -108,7 +126,9 @@ fun ExpenseDashboard(
         .sumOf { it.amount }
 
     val balance = income - expenses
-    val formattedBalance = String.format("%.2f", balance)
+    val formattedBalance = formatMoney(balance)
+    val formattedIncome = formatMoney(income)
+    val formattedExpenses = formatMoney(expenses)
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -170,7 +190,7 @@ fun ExpenseDashboard(
                             color = Color.White.copy(alpha = 0.8f)
                         )
                         Text(
-                            text = "+ €$income",
+                            text = "+ €$formattedIncome",
                             color = Color(0xFF86EFAC),
                             fontWeight = FontWeight.Bold
                         )
@@ -182,7 +202,7 @@ fun ExpenseDashboard(
                             color = Color.White.copy(alpha = 0.8f)
                         )
                         Text(
-                            text = "- €$expenses",
+                            text = "- €$formattedExpenses",
                             color = Color(0xFFFCA5A5),
                             fontWeight = FontWeight.Bold
                         )
@@ -201,6 +221,23 @@ fun ExpenseDashboard(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            Button(
+                onClick = {
+                    showMessage = true
+                },
+            ) {
+                Text("+ Προσθήκη συναλλαγής")
+            }
+
+            if (showMessage) {
+                OutlinedTextField(
+                    value = title,
+                    onValueChange = { title = it },
+                    label = { Text("Τίτλος") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
             transactions.forEach { transaction ->
                 TransactionRow(
                     title = transaction.title,
@@ -211,6 +248,4 @@ fun ExpenseDashboard(
         }
     }
 }}
-
-
 
