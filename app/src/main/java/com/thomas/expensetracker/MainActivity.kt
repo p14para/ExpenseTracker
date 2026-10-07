@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.util.Locale
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,10 +36,12 @@ private val AppBackground = Color(0xFFF4F6FA)
 private val Navy = Color(0xFF172554)
 private val Green = Color(0xFF15803D)
 private val Red = Color(0xFFDC2626)
+
 enum class TransactionType {
     INCOME,
     EXPENSE
 }
+
 data class Transaction(
     val title: String,
     val category: String,
@@ -47,13 +50,13 @@ data class Transaction(
 )
 
 
-fun formatMoney (amount: Double): String {
-    return String.format(Locale("el","GR"), "%.2f", amount)
+fun formatMoney(amount: Double): String {
+    return String.format(Locale("el", "GR"), "%.2f", amount)
 }
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState) 
+        super.onCreate(savedInstanceState)
 
         setContent {
             MaterialTheme {
@@ -109,6 +112,8 @@ fun ExpenseDashboard(
     var showMessage by remember { mutableStateOf(false) }
     var title by remember { mutableStateOf("") }
     var category by remember { mutableStateOf("") }
+    var amount by remember { mutableStateOf("") }
+    var type by remember { mutableStateOf(TransactionType.INCOME) }
 
     val transactions = listOf(
         Transaction("Supermarket", "Φαγητό", 65.0, TransactionType.EXPENSE),
@@ -243,6 +248,51 @@ fun ExpenseDashboard(
                     label = { Text("Κατηγορία") },
                     modifier = Modifier.fillMaxWidth()
                 )
+                OutlinedTextField(
+                    value = amount,
+                    onValueChange = { amount = it },
+                    label = { Text("Ποσό") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Button(
+                    onClick = {
+                        type = TransactionType.INCOME
+                    },
+                    colors = if (type == TransactionType.INCOME) {
+                        ButtonDefaults.buttonColors(
+                            containerColor = Green,
+                            contentColor = Color.White
+                        )
+                    } else {
+                        ButtonDefaults.buttonColors(
+                            containerColor = Color.White,
+                            contentColor = Green
+                        )
+                    }
+                ) {
+                    Text("Εσοδο")
+                }
+
+                Button(
+                    onClick = {
+                        type = TransactionType.EXPENSE
+                    },
+                    colors = if (type == TransactionType.EXPENSE) {
+                        ButtonDefaults.buttonColors(
+                            containerColor = Red,
+                            contentColor = Color.White
+                        )
+                    } else {
+                        ButtonDefaults.buttonColors(
+                            containerColor = Color.White,
+                            contentColor = Red
+                        )
+                    }
+                ) {
+                    Text("Έξοδο")
+
+                }
             }
 
             transactions.forEach { transaction ->
@@ -252,7 +302,8 @@ fun ExpenseDashboard(
                     amount = transaction.amount.toString(),
                     amountColor = if (transaction.type == TransactionType.INCOME) Green else Red
                 )
+            }
         }
     }
-}}
+}
 
