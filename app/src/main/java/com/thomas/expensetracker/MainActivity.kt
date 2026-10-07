@@ -108,6 +108,7 @@ fun ExpenseDashboard(
 
     var showMessage by remember { mutableStateOf(false) }
     var title by remember { mutableStateOf("") }
+    var category by remember { mutableStateOf("") }
 
     val transactions = listOf(
         Transaction("Supermarket", "Φαγητό", 65.0, TransactionType.EXPENSE),
@@ -234,6 +235,12 @@ fun ExpenseDashboard(
                     value = title,
                     onValueChange = { title = it },
                     label = { Text("Τίτλος") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                OutlinedTextField(
+                    value = category,
+                    onValueChange = { category = it },
+                    label = { Text("Κατηγορία") },
                     modifier = Modifier.fillMaxWidth()
                 )
             }
