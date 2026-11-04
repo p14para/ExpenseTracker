@@ -293,17 +293,20 @@ fun ExpenseDashboard(
                     Text("Έξοδο")
                     Button(
                         onClick = {
-                            val newTransaction = Transaction(
-                                title = title,
-                                category = category,
-                                amount = amount.toDouble(),
-                                type = type
-                            )
-                            transactions = transactions + newTransaction
-                            title = ""
-                            category = ""
-                            amount = ""
-                            showMessage = false
+                            val numericAmount = amount.toDoubleOrNull()
+                            if (numericAmount != null) {
+                                val newTransaction = Transaction(
+                                    title = title,
+                                    category = category,
+                                    amount = amount.toDouble(),
+                                    type = type
+                                )
+                                transactions = transactions + newTransaction
+                                title = ""
+                                category = ""
+                                amount = ""
+                                showMessage = false
+                            }
                         }
                     ) {
                         Text("Αποθήκευση")
