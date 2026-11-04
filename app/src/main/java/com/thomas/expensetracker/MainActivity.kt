@@ -115,13 +115,13 @@ fun ExpenseDashboard(
     var amount by remember { mutableStateOf("") }
     var type by remember { mutableStateOf(TransactionType.INCOME) }
 
-    val transactions = listOf(
+    var transactions by remember {mutableStateOf(listOf(
         Transaction("Supermarket", "Φαγητό", 65.0, TransactionType.EXPENSE),
         Transaction("Μισθός", "Έσοδα", 1500.0, TransactionType.INCOME),
         Transaction("Καύσιμα", "Μεταφορές", 45.0, TransactionType.EXPENSE),
         Transaction("Καφές", "Φαγητό", 3.5, TransactionType.EXPENSE),
         Transaction("Βενζίνη", "Μεταφορές", 50.0, TransactionType.EXPENSE)
-    )
+    ))}
 
     val income = transactions
         .filter { it.type == TransactionType.INCOME }
