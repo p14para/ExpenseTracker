@@ -114,6 +114,7 @@ fun ExpenseDashboard(
     var category by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }
     var type by remember { mutableStateOf(TransactionType.INCOME) }
+    var errorMessage by remember { mutableStateOf(false) }
 
     var transactions by remember {mutableStateOf(listOf(
         Transaction("Supermarket", "Φαγητό", 65.0, TransactionType.EXPENSE),
@@ -250,10 +251,20 @@ fun ExpenseDashboard(
                 )
                 OutlinedTextField(
                     value = amount,
-                    onValueChange = { amount = it },
+                    onValueChange = {
+                        amount = it
+                        errorMessage = false
+                    },
                     label = { Text("Ποσό") },
                     modifier = Modifier.fillMaxWidth()
                 )
+
+                if (errorMessage) {
+                    Text(
+                        text = "Παρακαλώ εισάγετε έγκυρο ποσό",
+                        color = Color.Red
+                    )
+                }
 
                 Button(
                     onClick = {
@@ -306,6 +317,9 @@ fun ExpenseDashboard(
                                 category = ""
                                 amount = ""
                                 showMessage = false
+                            }
+                            else {
+                                errorMessage = true
                             }
                         }
                     ) {
