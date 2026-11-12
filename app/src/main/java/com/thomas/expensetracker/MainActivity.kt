@@ -305,7 +305,10 @@ fun ExpenseDashboard(
                     Button(
                         onClick = {
                             val numericAmount = amount.toDoubleOrNull()
-                            if (numericAmount != null) {
+                            val isFormValid = title.isNotBlank() &&
+                                    category.isNotBlank()
+                                    && numericAmount != null
+                            if (isFormValid) {
                                 val newTransaction = Transaction(
                                     title = title,
                                     category = category,
