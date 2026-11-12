@@ -117,7 +117,7 @@ fun ExpenseDashboard(
     var category by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }
     var type by remember { mutableStateOf(TransactionType.INCOME) }
-    var errorMessage by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
 
     var transactions by remember {
         mutableStateOf(
@@ -270,9 +270,9 @@ fun ExpenseDashboard(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                if (errorMessage) {
+                if (errorMessage.isNotEmpty()) {
                     Text(
-                        text = "Παρακαλώ εισάγετε έγκυρο ποσό",
+                        text = errorMessage,
                         color = Color.Red
                     )
                 }
