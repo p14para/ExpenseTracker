@@ -116,13 +116,17 @@ fun ExpenseDashboard(
     var type by remember { mutableStateOf(TransactionType.INCOME) }
     var errorMessage by remember { mutableStateOf(false) }
 
-    var transactions by remember {mutableStateOf(listOf(
-        Transaction("Supermarket", "Φαγητό", 65.0, TransactionType.EXPENSE),
-        Transaction("Μισθός", "Έσοδα", 1500.0, TransactionType.INCOME),
-        Transaction("Καύσιμα", "Μεταφορές", 45.0, TransactionType.EXPENSE),
-        Transaction("Καφές", "Φαγητό", 3.5, TransactionType.EXPENSE),
-        Transaction("Βενζίνη", "Μεταφορές", 50.0, TransactionType.EXPENSE)
-    ))}
+    var transactions by remember {
+        mutableStateOf(
+            listOf(
+                Transaction("Supermarket", "Φαγητό", 65.0, TransactionType.EXPENSE),
+                Transaction("Μισθός", "Έσοδα", 1500.0, TransactionType.INCOME),
+                Transaction("Καύσιμα", "Μεταφορές", 45.0, TransactionType.EXPENSE),
+                Transaction("Καφές", "Φαγητό", 3.5, TransactionType.EXPENSE),
+                Transaction("Βενζίνη", "Μεταφορές", 50.0, TransactionType.EXPENSE)
+            )
+        )
+    }
 
     val income = transactions
         .filter { it.type == TransactionType.INCOME }
@@ -266,69 +270,75 @@ fun ExpenseDashboard(
                     )
                 }
 
-                Button(
-                    onClick = {
-                        type = TransactionType.INCOME
-                    },
-                    colors = if (type == TransactionType.INCOME) {
-                        ButtonDefaults.buttonColors(
-                            containerColor = Green,
-                            contentColor = Color.White
-                        )
-                    } else {
-                        ButtonDefaults.buttonColors(
-                            containerColor = Color.White,
-                            contentColor = Green
-                        )
-                    }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text("Εσοδο")
+                    Button(
+                        onClick = {
+                            type = TransactionType.INCOME
+                        },
+                        colors = if (type == TransactionType.INCOME) {
+                            ButtonDefaults.buttonColors(
+                                containerColor = Green,
+                                contentColor = Color.White
+                            )
+                        } else {
+                            ButtonDefaults.buttonColors(
+                                containerColor = Color.White,
+                                contentColor = Green
+                            )
+                        }
+                    ) {
+                        Text("Εσοδο")
+                    }
+
+                    Button(
+                        onClick = {
+                            type = TransactionType.EXPENSE
+                        },
+                        colors = if (type == TransactionType.EXPENSE) {
+                            ButtonDefaults.buttonColors(
+                                containerColor = Red,
+                                contentColor = Color.White
+                            )
+                        } else {
+                            ButtonDefaults.buttonColors(
+                                containerColor = Color.White,
+                                contentColor = Red
+                            )
+                        }
+                    ) {
+                        Text("Έξοδο")
+                    }
                 }
 
                 Button(
+                    modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                        type = TransactionType.EXPENSE
-                    },
-                    colors = if (type == TransactionType.EXPENSE) {
-                        ButtonDefaults.buttonColors(
-                            containerColor = Red,
-                            contentColor = Color.White
-                        )
-                    } else {
-                        ButtonDefaults.buttonColors(
-                            containerColor = Color.White,
-                            contentColor = Red
-                        )
+                        val numericAmount = amount.toDoubleOrNull()
+                        val isFormValid = title.isNotBlank() &&
+                                category.isNotBlank()
+                                && numericAmount != null
+                        if (isFormValid) {
+                            val newTransaction = Transaction(
+                                title = title,
+                                category = category,
+                                amount = amount.toDouble(),
+                                type = type
+                            )
+                            transactions = transactions + newTransaction
+                            title = ""
+                            category = ""
+                            amount = ""
+                            showMessage = false
+                        } else {
+                            errorMessage = true
+                        }
                     }
                 ) {
-                    Text("Έξοδο")
+                    Text("Αποθήκευση")
                 }
-                    Button(
-                        onClick = {
-                            val numericAmount = amount.toDoubleOrNull()
-                            val isFormValid = title.isNotBlank() &&
-                                    category.isNotBlank()
-                                    && numericAmount != null
-                            if (isFormValid) {
-                                val newTransaction = Transaction(
-                                    title = title,
-                                    category = category,
-                                    amount = amount.toDouble(),
-                                    type = type
-                                )
-                                transactions = transactions + newTransaction
-                                title = ""
-                                category = ""
-                                amount = ""
-                                showMessage = false
-                            }
-                            else {
-                                errorMessage = true
-                            }
-                        }
-                    ) {
-                        Text("Αποθήκευση")
-                    }
             }
 
             transactions.forEach { transaction ->
