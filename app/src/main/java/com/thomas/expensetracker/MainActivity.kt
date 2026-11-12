@@ -302,6 +302,7 @@ fun ExpenseDashboard(
                     }
                 ) {
                     Text("Έξοδο")
+                }
                     Button(
                         onClick = {
                             val numericAmount = amount.toDoubleOrNull()
@@ -328,7 +329,6 @@ fun ExpenseDashboard(
                     ) {
                         Text("Αποθήκευση")
                     }
-                }
             }
 
             transactions.forEach { transaction ->
