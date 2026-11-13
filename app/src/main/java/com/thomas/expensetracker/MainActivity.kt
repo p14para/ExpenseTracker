@@ -46,6 +46,7 @@ enum class TransactionType {
 }
 
 data class Transaction(
+    val id: Long,
     val title: String,
     val category: String,
     val amount: Double,
@@ -74,7 +75,8 @@ fun TransactionRow(
     title: String,
     category: String,
     amount: String,
-    amountColor: Color
+    amountColor: Color,
+    onDelete: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -103,6 +105,14 @@ fun TransactionRow(
             color = amountColor,
             fontWeight = FontWeight.Bold
         )
+
+        Button(
+            onClick = {
+                onDelete()
+            }
+        ) {
+            Text("Διαγραφή")
+        }
     }
 }
 
@@ -122,11 +132,11 @@ fun ExpenseDashboard(
     var transactions by remember {
         mutableStateOf(
             listOf(
-                Transaction("Supermarket", "Φαγητό", 65.0, TransactionType.EXPENSE),
-                Transaction("Μισθός", "Έσοδα", 1500.0, TransactionType.INCOME),
-                Transaction("Καύσιμα", "Μεταφορές", 45.0, TransactionType.EXPENSE),
-                Transaction("Καφές", "Φαγητό", 3.5, TransactionType.EXPENSE),
-                Transaction("Βενζίνη", "Μεταφορές", 50.0, TransactionType.EXPENSE)
+                Transaction(1L,"Supermarket", "Φαγητό", 65.0, TransactionType.EXPENSE),
+                Transaction(2L,"Μισθός", "Έσοδα", 1500.0, TransactionType.INCOME),
+                Transaction(3L,"Καύσιμα", "Μεταφορές", 45.0, TransactionType.EXPENSE),
+                Transaction(4L,"Καφές", "Φαγητό", 3.5, TransactionType.EXPENSE),
+                Transaction(5L,"Βενζίνη", "Μεταφορές", 50.0, TransactionType.EXPENSE)
             )
         )
     }
@@ -335,6 +345,7 @@ fun ExpenseDashboard(
                             errorMessage = "Παρακαλώ εισάγετε έγκυρο ποσό."
                         } else {
                             transactions = transactions + Transaction(
+                                id = System.currentTimeMillis(),
                                 title = title,
                                 category = category,
                                 amount = numericAmount,
@@ -358,7 +369,10 @@ fun ExpenseDashboard(
                     title = transaction.title,
                     category = transaction.category,
                     amount = sign + " €" + formatMoney(transaction.amount),
-                    amountColor = if (transaction.type == TransactionType.INCOME) Green else Red
+                    amountColor = if (transaction.type == TransactionType.INCOME) Green else Red,
+                    onDelete = {
+                        transactions = transactions.filter { it.id != transaction.id }
+                    }
                 )
             }
         }
