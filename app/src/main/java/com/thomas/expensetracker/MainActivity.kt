@@ -357,7 +357,7 @@ fun ExpenseDashboard(
                 TransactionRow(
                     title = transaction.title,
                     category = transaction.category,
-                    amount = formatMoney(transaction.amount),
+                    amount = sign + " €" + formatMoney(transaction.amount),
                     amountColor = if (transaction.type == TransactionType.INCOME) Green else Red
                 )
             }
