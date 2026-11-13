@@ -264,7 +264,7 @@ fun ExpenseDashboard(
                     value = amount,
                     onValueChange = {
                         amount = it
-                        errorMessage = false
+                        errorMessage = ""
                     },
                     label = { Text("Ποσό") },
                     modifier = Modifier.fillMaxWidth()
@@ -327,21 +327,13 @@ fun ExpenseDashboard(
                         val isFormValid = title.isNotBlank() &&
                                 category.isNotBlank()
                                 && numericAmount != null
-                        if (isFormValid) {
-                            val newTransaction = Transaction(
-                                title = title,
-                                category = category,
-                                amount = amount.toDouble(),
-                                type = type
-                            )
-                            transactions = transactions + newTransaction
-                            title = ""
-                            category = ""
-                            amount = ""
-                            showMessage = false
-                        } else {
-                            errorMessage = true
-                        }
+                       if (title.isBlank()) {
+                           errorMessage = "Το πεδίο Τίτλος είναι υποχρεωτικό."
+                       } else if (category.isBlank()) {
+                           errorMessage = "Το πεδίο Κατηγορία είναι υποχρεωτικό."
+                       } else if (numericAmount == null) {
+                           errorMessage = "Παρακαλώ εισάγετε έγκυρο ποσό."
+                       }
                     }
                 ) {
                     Text("Αποθήκευση")
