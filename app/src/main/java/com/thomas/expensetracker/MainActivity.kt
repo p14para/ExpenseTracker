@@ -353,6 +353,7 @@ fun ExpenseDashboard(
             }
 
             transactions.forEach { transaction ->
+                val sign = if (transaction.type == TransactionType.INCOME) "+" else "-"
                 TransactionRow(
                     title = transaction.title,
                     category = transaction.category,
