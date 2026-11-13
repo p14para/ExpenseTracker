@@ -327,13 +327,25 @@ fun ExpenseDashboard(
                         val isFormValid = title.isNotBlank() &&
                                 category.isNotBlank()
                                 && numericAmount != null
-                       if (title.isBlank()) {
-                           errorMessage = "Το πεδίο Τίτλος είναι υποχρεωτικό."
-                       } else if (category.isBlank()) {
-                           errorMessage = "Το πεδίο Κατηγορία είναι υποχρεωτικό."
-                       } else if (numericAmount == null) {
-                           errorMessage = "Παρακαλώ εισάγετε έγκυρο ποσό."
-                       }
+                        if (title.isBlank()) {
+                            errorMessage = "Το πεδίο Τίτλος είναι υποχρεωτικό."
+                        } else if (category.isBlank()) {
+                            errorMessage = "Το πεδίο Κατηγορία είναι υποχρεωτικό."
+                        } else if (numericAmount == null) {
+                            errorMessage = "Παρακαλώ εισάγετε έγκυρο ποσό."
+                        } else {
+                            transactions = transactions + Transaction(
+                                title = title,
+                                category = category,
+                                amount = numericAmount,
+                                type = type
+                            )
+                            title = ""
+                            category = ""
+                            amount = ""
+                            showMessage = false
+                            errorMessage = ""
+                        }
                     }
                 ) {
                     Text("Αποθήκευση")
