@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -34,6 +35,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 
 private val AppBackground = Color(0xFFF4F6FA)
 private val Navy = Color(0xFF172554)
@@ -84,40 +87,49 @@ fun TransactionRow(
     amountColor: Color,
     onDelete: () -> Unit
 ) {
-    Row(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Column {
-            Text(
-                text = title,
-                fontWeight = FontWeight.SemiBold,
-                color = Navy
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Text(
-                text = category,
-                color = Color.Gray,
-                fontSize = 13.sp
-            )
-        }
-
-        Text(
-            text = amount,
-            color = amountColor,
-            fontWeight = FontWeight.Bold
+            .padding(vertical = 6.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
         )
-
-        Button(
-            onClick = {
-                onDelete()
-            }
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("Διαγραφή")
+            Column {
+                Text(
+                    text = title,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Navy
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = category,
+                    color = Color.Gray,
+                    fontSize = 13.sp
+                )
+            }
+
+            Text(
+                text = amount,
+                color = amountColor,
+                fontWeight = FontWeight.Bold
+            )
+
+            Button(
+                onClick = {
+                    onDelete()
+                }
+            ) {
+                Text("Διαγραφή")
+            }
         }
     }
 }
