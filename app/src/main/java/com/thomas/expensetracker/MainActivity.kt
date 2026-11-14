@@ -271,6 +271,14 @@ fun ExpenseDashboard(
                     onClick = {
                         selectedFilter = TransactionFilter.ALL
                     },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (selectedFilter == TransactionFilter.ALL) {
+                            Navy
+                        } else {
+                            Color.LightGray
+                        },
+                        contentColor = Color.White
+                    )
                 ){
                     Text("Όλες")
                 }
