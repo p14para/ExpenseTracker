@@ -285,14 +285,30 @@ fun ExpenseDashboard(
                 Button(
                     onClick = {
                         selectedFilter = TransactionFilter.INCOME
-                    }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (selectedFilter == TransactionFilter.INCOME) {
+                            Navy
+                        } else {
+                            Color.LightGray
+                        },
+                        contentColor = Color.White
+                    )
                 ){
                     Text("Εσοδα")
                 }
                 Button(
                     onClick = {
                         selectedFilter = TransactionFilter.EXPENSE
-                    }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (selectedFilter == TransactionFilter.EXPENSE) {
+                            Navy
+                        } else {
+                            Color.LightGray
+                        },
+                        contentColor = Color.White
+                    )
                 ){
                     Text("Έξοδα")
                 }
