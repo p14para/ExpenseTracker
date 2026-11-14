@@ -45,6 +45,12 @@ enum class TransactionType {
     EXPENSE
 }
 
+enum class TransactionFilter {
+    ALL,
+    INCOME,
+    EXPENSE
+}
+
 data class Transaction(
     val id: Long,
     val title: String,
@@ -128,6 +134,8 @@ fun ExpenseDashboard(
     var amount by remember { mutableStateOf("") }
     var type by remember { mutableStateOf(TransactionType.INCOME) }
     var errorMessage by remember { mutableStateOf("") }
+    var selectedFilter by remember { mutableStateOf(TransactionFilter.ALL) }
+
 
     var transactions by remember {
         mutableStateOf(
@@ -139,6 +147,14 @@ fun ExpenseDashboard(
                 Transaction(5L,"Βενζίνη", "Μεταφορές", 50.0, TransactionType.EXPENSE)
             )
         )
+    }
+
+    val filteredTransactions = transactions.filter { transaction ->
+        when (selectedFilter) {
+            TransactionFilter.ALL -> true
+            TransactionFilter.INCOME -> transaction.type == TransactionType.INCOME
+            TransactionFilter.EXPENSE -> transaction.type == TransactionType.EXPENSE
+        }
     }
 
     val income = transactions
@@ -246,6 +262,33 @@ fun ExpenseDashboard(
                 fontWeight = FontWeight.Bold,
                 color = Navy
             )
+
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Button(
+                    onClick = {
+                        selectedFilter = TransactionFilter.ALL
+                    },
+                ){
+                    Text("Όλες")
+                }
+                Button(
+                    onClick = {
+                        selectedFilter = TransactionFilter.INCOME
+                    }
+                ){
+                    Text("Εσοδα")
+                }
+                Button(
+                    onClick = {
+                        selectedFilter = TransactionFilter.EXPENSE
+                    }
+                ){
+                    Text("Έξοδα")
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -363,7 +406,7 @@ fun ExpenseDashboard(
                 }
             }
 
-            transactions.forEach { transaction ->
+            filteredTransactions.forEach { transaction ->
                 val sign = if (transaction.type == TransactionType.INCOME) "+" else "-"
                 TransactionRow(
                     title = transaction.title,
