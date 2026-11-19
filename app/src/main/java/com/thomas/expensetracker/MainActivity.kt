@@ -152,11 +152,11 @@ fun ExpenseDashboard(
     var transactions by remember {
         mutableStateOf(
             listOf(
-                Transaction(1L,"Supermarket", "Φαγητό", 65.0, TransactionType.EXPENSE),
-                Transaction(2L,"Μισθός", "Έσοδα", 1500.0, TransactionType.INCOME),
-                Transaction(3L,"Καύσιμα", "Μεταφορές", 45.0, TransactionType.EXPENSE),
-                Transaction(4L,"Καφές", "Φαγητό", 3.5, TransactionType.EXPENSE),
-                Transaction(5L,"Βενζίνη", "Μεταφορές", 50.0, TransactionType.EXPENSE)
+                Transaction(1L, "Supermarket", "Φαγητό", 65.0, TransactionType.EXPENSE),
+                Transaction(2L, "Μισθός", "Έσοδα", 1500.0, TransactionType.INCOME),
+                Transaction(3L, "Καύσιμα", "Μεταφορές", 45.0, TransactionType.EXPENSE),
+                Transaction(4L, "Καφές", "Φαγητό", 3.5, TransactionType.EXPENSE),
+                Transaction(5L, "Βενζίνη", "Μεταφορές", 50.0, TransactionType.EXPENSE)
             )
         )
     }
@@ -275,7 +275,7 @@ fun ExpenseDashboard(
                 color = Navy
             )
 
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -291,7 +291,7 @@ fun ExpenseDashboard(
                         },
                         contentColor = Color.White
                     )
-                ){
+                ) {
                     Text("Όλες")
                 }
                 Button(
@@ -306,7 +306,7 @@ fun ExpenseDashboard(
                         },
                         contentColor = Color.White
                     )
-                ){
+                ) {
                     Text("Εσοδα")
                 }
                 Button(
@@ -321,7 +321,7 @@ fun ExpenseDashboard(
                         },
                         contentColor = Color.White
                     )
-                ){
+                ) {
                     Text("Έξοδα")
                 }
             }
@@ -442,17 +442,25 @@ fun ExpenseDashboard(
                 }
             }
 
-            filteredTransactions.forEach { transaction ->
-                val sign = if (transaction.type == TransactionType.INCOME) "+" else "-"
-                TransactionRow(
-                    title = transaction.title,
-                    category = transaction.category,
-                    amount = sign + " €" + formatMoney(transaction.amount),
-                    amountColor = if (transaction.type == TransactionType.INCOME) Green else Red,
-                    onDelete = {
-                        transactions = transactions.filter { it.id != transaction.id }
-                    }
+            if (filteredTransactions.isEmpty()) {
+                Text(
+                    text = "Δεν υπάρχουν συναλλαγές για εμφάνιση",
+                    color = Color.Gray,
+                    modifier = Modifier.padding(16.dp)
                 )
+            } else {
+                filteredTransactions.forEach { transaction ->
+                    val sign = if (transaction.type == TransactionType.INCOME) "+" else "-"
+                    TransactionRow(
+                        title = transaction.title,
+                        category = transaction.category,
+                        amount = sign + " €" + formatMoney(transaction.amount),
+                        amountColor = if (transaction.type == TransactionType.INCOME) Green else Red,
+                        onDelete = {
+                            transactions = transactions.filter { it.id != transaction.id }
+                        }
+                    )
+                }
             }
         }
     }
