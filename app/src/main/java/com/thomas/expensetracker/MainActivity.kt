@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -37,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.TextButton
 
 private val AppBackground = Color(0xFFF4F6FA)
 private val Navy = Color(0xFF172554)
@@ -147,6 +149,8 @@ fun ExpenseDashboard(
     var type by remember { mutableStateOf(TransactionType.INCOME) }
     var errorMessage by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf(TransactionFilter.ALL) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var transactionToDelete by remember { mutableStateOf<Transaction?>(null) }
 
 
     var transactions by remember {
@@ -457,12 +461,47 @@ fun ExpenseDashboard(
                         amount = sign + " €" + formatMoney(transaction.amount),
                         amountColor = if (transaction.type == TransactionType.INCOME) Green else Red,
                         onDelete = {
-                            transactions = transactions.filter { it.id != transaction.id }
+                            transactionToDelete = transaction
+                            showDeleteDialog = true
                         }
                     )
                 }
             }
         }
+    }
+
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showDeleteDialog = false
+            },
+            title = {
+                Text("Επιβεβαίωση διαγραφής")
+            },
+            text = {
+                Text("Είσαι σίγουρος ότι θέλεις να διαγράψεις αυτή τη συναλλαγή;")
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    transactionToDelete?.let { transaction ->
+                        transactions = transactions.filter {
+                            it.id != transaction.id
+                        }
+                    }
+                    transactionToDelete = null
+                    showDeleteDialog = false
+                }) {
+                    Text("Ναι")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showDeleteDialog = false
+                }) {
+                    Text("Ακύρωση")
+                }
+            }
+        )
     }
 }
 
